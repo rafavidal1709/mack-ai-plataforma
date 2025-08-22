@@ -1,9 +1,19 @@
 <?php
-$pdo = new PDO("mysql:host=localhost;dbname=ecovir28_mackai;charset=utf8mb4", "ecovir28_mackai", "WQMla7~i##8Z", [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION, 
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC, 
-    PDO::ATTR_EMULATE_PREPARES => false
-]);
+$host = getenv('DB_HOST');   // 35.188.94.112
+$db   = getenv('DB_NAME');   // mackai
+$user = getenv('DB_USER');   // root
+$pass = getenv('DB_PASS');   // aA!12345
+
+$pdo = new PDO(
+    "mysql:host=$host;port=3306;dbname=$db;charset=utf8mb4",
+    $user,
+    $pass,
+    [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+        PDO::ATTR_EMULATE_PREPARES => false,
+    ]
+);
 
 $id = 1;
 
