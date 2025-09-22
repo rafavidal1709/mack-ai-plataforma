@@ -390,49 +390,61 @@ JOIN sem_bounds b ON b.semestre_id = o.semestre;
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 8,  1, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
-JOIN (SELECT '2024/2' des, TIMESTAMPTZ '2024-08-01-03' ini, TIMESTAMPTZ '2024-12-20-03' fim) b
-  ON b.des = s.des;
+JOIN (
+  SELECT '2024/2' AS des,
+         TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
+         TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
+) b ON b.des = s.des;
 
 -- 2024/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 6,  2, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
-JOIN (SELECT '2024/2' des, TIMESTAMPTZ '2024-08-01-03' ini, TIMESTAMPTZ '2024-12-20-03' fim) b
-  ON b.des = s.des;
+JOIN (
+  SELECT '2024/2' AS des,
+         TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
+         TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
+) b ON b.des = s.des;
 
 -- 2025/1 — PRESIDENTE
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 8,  3, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
-JOIN (SELECT '2025/1' des, TIMESTAMPTZ '2025-03-01-03' ini, TIMESTAMPTZ '2025-07-15-03' fim) b
-  ON b.des = s.des;
+JOIN (
+  SELECT '2025/1' AS des,
+         TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
+         TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
+) b ON b.des = s.des;
 
 -- 2025/1 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 6,  4, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
-JOIN (SELECT '2025/1' des, TIMESTAMPTZ '2025-03-01-03' ini, TIMESTAMPTZ '2025-07-15-03' fim) b
-  ON b.des = s.des;
+JOIN (
+  SELECT '2025/1' AS des,
+         TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
+         TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
+) b ON b.des = s.des;
 
 -- 2025/2 — PRESIDENTE
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 8,  5, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
-JOIN (SELECT '2025/2' des, TIMESTAMPTZ '2025-08-01-03' ini, TIMESTAMPTZ '2025-12-20-03' fim) b
-  ON b.des = s.des;
+JOIN (
+  SELECT '2025/2' AS des,
+         TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
+         TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
+) b ON b.des = s.des;
 
 -- 2025/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 6,  6, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
-JOIN (SELECT '2025/2' des, TIMESTAMPTZ '2025-08-01-03' ini, TIMESTAMPTZ '2025-12-20-03' fim) b
-  ON b.des = s.des;
-
--- (Opcional) Registrar no LOG o mapeamento de cargos (id do participante => cargo)
-INSERT INTO log (tempo, rotulo, dados) VALUES
-  (NOW(), 'cargo_map', '{"semestre":"2024/2","presidente_ra":"RA0001","marketing_ra":"RA0002"}'),
-  (NOW(), 'cargo_map', '{"semestre":"2025/1","presidente_ra":"RA0003","marketing_ra":"RA0004"}'),
-  (NOW(), 'cargo_map', '{"semestre":"2025/2","presidente_ra":"RA0005","marketing_ra":"RA0006"}');
+JOIN (
+  SELECT '2025/2' AS des,
+         TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
+         TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
+) b ON b.des = s.des;
 
 -- ============================
 -- HORAS (totais por participante x semestre)
