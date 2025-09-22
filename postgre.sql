@@ -1,5 +1,7 @@
--- Opcional: tudo no schema public (padrão)
--- CREATE SCHEMA IF NOT EXISTS public;
+-- Reiniciar `schema`
+DROP SCHEMA IF EXISTS plataforma CASCADE;
+CREATE SCHEMA plataforma;
+SET search_path TO plataforma;
 
 -- Função e trigger para atualizar "atualizado" automaticamente
 CREATE OR REPLACE FUNCTION set_updated_at()
