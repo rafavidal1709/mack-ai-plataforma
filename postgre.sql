@@ -307,10 +307,10 @@ work_oc AS (
 )
 INSERT INTO tarefa (ocorrencia, inicio, prazo, tema, descricao)
 SELECT w.ocorrencia_id,
-       w.base_dt + make_interval(days => 10 * n)                        AS inicio,
-       w.base_dt + make_interval(days => 10 * n, days => 5)             AS prazo,
-       CONCAT(w.grupo_nome, ' - Tarefa ', n+1)                          AS tema,
-       'Executar atividade prática #' || (n+1)                          AS descricao
+       w.base_dt + make_interval(days => 10 * n)           AS inicio,
+       w.base_dt + make_interval(days => (10 * n + 5))     AS prazo,
+       CONCAT(w.grupo_nome, ' - Tarefa ', n+1)             AS tema,
+       'Executar atividade prática #' || (n+1)             AS descricao
 FROM work_oc w
 CROSS JOIN generate_series(0,1) AS n;
 
