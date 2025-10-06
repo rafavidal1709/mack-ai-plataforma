@@ -15,7 +15,7 @@ $$ LANGUAGE plpgsql;
 -- Tabelas
 CREATE TABLE semestre(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    des           VARCHAR(255) NOT NULL UNIQUE,
+    descricao           VARCHAR(255) NOT NULL UNIQUE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
@@ -100,7 +100,7 @@ CREATE TABLE executou(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
     participante  INT NOT NULL REFERENCES participante(id),
-    encontro      INT NOT NULL REFERENCES encontro(id),
+    tarefa        INT NOT NULL REFERENCES tarefa(id),
     valido        BOOLEAN NOT NULL DEFAULT FALSE,
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
