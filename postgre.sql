@@ -105,7 +105,7 @@ CREATE TABLE executou(
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    CONSTRAINT uq_executou_participante_encontro UNIQUE (participante, tarefa)
+    CONSTRAINT uq_executou_participante_tarefa UNIQUE (participante, tarefa)
 );
 
 CREATE TABLE coordenou(
