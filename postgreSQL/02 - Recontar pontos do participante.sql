@@ -1,3 +1,5 @@
+SET search_path TO plataforma;
+
 -- Calcula e grava as horas do participante no semestre (retorna o total)
 CREATE OR REPLACE FUNCTION calcular_horas_participante(
   in_participante BIGINT,
