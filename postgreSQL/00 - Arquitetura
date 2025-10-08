@@ -20,9 +20,12 @@ CREATE TABLE semestre(
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
+CREATE TYPE tipo_grupo AS ENUM ('estudo', 'trabalho', 'pesquisa');
+
 CREATE TABLE grupo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome          VARCHAR(255) NOT NULL UNIQUE,
+    tipo          tipo_grupo NOT NULL DEFAULT 'estudo',
     descricao     TEXT NULL,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
