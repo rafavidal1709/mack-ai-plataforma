@@ -57,6 +57,7 @@ CREATE TABLE encontro(
 CREATE TABLE tarefa(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
+    horas         INT NOT NULL DEFAULT 1,
     inicio        TIMESTAMPTZ NOT NULL,
     prazo         TIMESTAMPTZ NOT NULL,
     tema          VARCHAR(255) NOT NULL,
