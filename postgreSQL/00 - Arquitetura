@@ -126,9 +126,12 @@ CREATE TABLE coordenou(
     CONSTRAINT uq_coordenou_participante_ocorrencia_inicio UNIQUE (participante, ocorrencia, inicio)
 );
 
+CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor');
+
 CREATE TABLE cargo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
+    tipo          tipo_cargo NOT NULL,
     participante  INT NOT NULL REFERENCES participante(id),
     semestre      INT NOT NULL REFERENCES semestre(id),
     inicio        TIMESTAMPTZ NOT NULL,
