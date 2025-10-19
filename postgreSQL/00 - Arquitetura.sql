@@ -126,7 +126,7 @@ CREATE TABLE coordenou(
     CONSTRAINT uq_coordenou_participante_ocorrencia_inicio UNIQUE (participante, ocorrencia, inicio)
 );
 
-CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor');
+CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing');
 
 CREATE TABLE cargo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
