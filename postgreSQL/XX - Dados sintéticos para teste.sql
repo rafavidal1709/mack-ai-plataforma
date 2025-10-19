@@ -66,18 +66,22 @@ WITH bases AS (
   FROM semestre s
 ),
 alvos AS (
-  SELECT o.id AS ocorrencia_id, g.nome AS grupo_nome, b.base_dt,
-         row_number() OVER (PARTITION BY o.semestre, o.grupo ORDER BY o.id) AS rn
+  SELECT
+    o.id AS ocorrencia_id,
+    g.nome AS grupo_nome,
+    b.base_dt,
+    row_number() OVER (PARTITION BY o.semestre, o.grupo ORDER BY o.id) AS rn
   FROM ocorreu o
   JOIN grupo g ON g.id = o.grupo
   JOIN bases b ON b.semestre_id = o.semestre
 )
 INSERT INTO encontro (ocorrencia, inicio, fim, tema, resumo)
-SELECT a.ocorrencia_id,
-       a.base_dt + make_interval(days => 7 * n)             AS inicio,
-       a.base_dt + make_interval(days => 7 * n, hours => 2) AS fim,
-       CONCAT(a.grupo_nome, ' - Sessão ', n+1)              AS tema,
-       'Discussões e atividades do encontro ' || (n+1)      AS resumo
+SELECT
+  a.ocorrencia_id,
+  a.base_dt + make_interval(days => 7 * n)             AS inicio,
+  a.base_dt + make_interval(days => 7 * n, hours => 2) AS fim,
+  CONCAT(a.grupo_nome, ' - Sessão ', n+1)              AS tema,
+  'Discussões e atividades do encontro ' || (n+1)      AS resumo
 FROM alvos a
 CROSS JOIN generate_series(0,1) AS n;
 
@@ -137,6 +141,22 @@ JOIN participante p ON (p.id % 12) = (e.id % 12);
 -- ============================
 -- EXECUTOU (execução prática em encontros) — só para grupos de trabalho
 -- ============================
+INSERT INTO executou (horas, participante, tarefa, valido, confirmado)
+SELECT
+  1,
+  p.id,
+  t.id,
+  TRUE,
+  ((p.id + t.id) % 5 = 0)  -- (antes estava e.id; aqui deve ser t.id)
+FROM tarefa t
+JOIN ocorreu o ON o.id = t.ocorrencia
+JOIN grupo g   ON g.id = o.grupo
+JOIN participante p ON (p.id % 4) = (t.id % 4)
+WHERE g.nome LIKE 'Trabalho:%';
+
+-- ============================
+-- COORDENOU (um coordenador por ocorrência, período dentro do semestre)
+-- ============================
 WITH sem_bounds AS (
   SELECT
     s.id AS semestre_id,
@@ -154,39 +174,21 @@ WITH sem_bounds AS (
   FROM semestre s
 )
 INSERT INTO coordenou (horas, participante, ocorrencia, inicio, fim, ativo, confirmado)
-SELECT 4,
-       ((o.id - 1) % 24) + 1,
-       o.id,
-       b.ini,
-       b.fim,
-       TRUE,
-       TRUE
+SELECT
+  4,
+  ((o.id - 1) % 24) + 1,
+  o.id,
+  b.ini,
+  b.fim,
+  TRUE,
+  TRUE
 FROM ocorreu o
 JOIN sem_bounds b ON b.semestre_id = o.semestre;
 
 -- ============================
 -- CARGOS (por semestre: presidente e marketing)
--- *Sem campo “tipo”: indicado via comentários abaixo*
 -- ============================
--- 2024/2 — PRESIDENTE
-INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
-SELECT 8,  1, s.id, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2024/2' AS descricao,
-         TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.descricao = s.descricao;
 
--- 2024/2 — MARKETING
-INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
-SELECT 6,  2, s.id, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2024/2' AS descricao,
-         TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.descricao = ;
 -- 2024/2 — PRESIDENTE
 INSERT INTO cargo (horas, participante, semestre, tipo, inicio, fim, ativo, confirmado)
 SELECT 8,  1, s.id, 'presidente'::plataforma.tipo_cargo, b.ini, b.fim, TRUE, TRUE
