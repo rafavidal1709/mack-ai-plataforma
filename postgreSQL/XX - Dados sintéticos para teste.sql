@@ -3,7 +3,7 @@ SET search_path TO plataforma;
 -- ============================
 -- SEMESTRES
 -- ============================
-INSERT INTO semestre (des) VALUES
+INSERT INTO semestre (descricao) VALUES
   ('2024/2'),
   ('2025/1'),
   ('2025/2');
@@ -55,8 +55,8 @@ CROSS JOIN grupo g;
 --   2025/2 -> 2025-08-01
 -- ============================
 WITH bases AS (
-  SELECT s.id AS semestre_id, s.des,
-         CASE s.des
+  SELECT s.id AS semestre_id, ,
+         CASE 
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-01 19:00:00-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-01 19:00:00-03'
            WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-01 19:00:00-03'
@@ -83,8 +83,8 @@ CROSS JOIN generate_series(0,1) AS n;
 -- TAREFAS (apenas grupos de trabalho) - 2 por ocorrência
 -- ============================
 WITH bases AS (
-  SELECT s.id AS semestre_id, s.des,
-         CASE s.des
+  SELECT s.id AS semestre_id, cricao,
+         CASE cricao
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-05 09:00:00-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-05 09:00:00-03'
            WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-05 09:00:00-03'
@@ -135,29 +135,29 @@ JOIN participante p ON (p.id % 12) = (e.id % 12);
 -- ============================
 -- EXECUTOU (execução prática em encontros) — só para grupos de trabalho
 -- ============================
-INSERT INTO executou (horas, participante, encontro, valido, confirmado)
+INSERT INTO executou (horas, participante, tarefa, valido, confirmado)
 SELECT 1,
        p.id,
        e.id,
        TRUE,
        ((p.id + e.id) % 5 = 0)
-FROM encontro e
-JOIN ocorreu o ON o.id = e.ocorrencia
+FROM tarefa t
+JOIN ocorreu o ON o.id = t.ocorrencia
 JOIN grupo g   ON g.id = o.grupo
-JOIN participante p ON (p.id % 4) = (e.id % 4)
+JOIN participante p ON (p.id % 4) = (t.id % 4)
 WHERE g.nome LIKE 'Trabalho:%';
 
 -- ============================
 -- COORDENOU (um coordenador por ocorrência, período dentro do semestre)
 -- ============================
 WITH sem_bounds AS (
-  SELECT s.id AS semestre_id, s.des,
-         CASE s.des
+  SELECT s.id AS semestre_id, ,
+         CASE cricao
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-01 00:00:00-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-01 00:00:00-03'
            WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-01 00:00:00-03'
          END AS ini,
-         CASE s.des
+         CASE 
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-12-20 23:59:59-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-07-15 23:59:59-03'
            WHEN '2025/2' THEN TIMESTAMPTZ '2025-12-20 23:59:59-03'
@@ -187,7 +187,7 @@ JOIN (
   SELECT '2024/2' AS des,
          TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.des = s.des;
+) b ON b.des = ;
 
 -- 2024/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
@@ -197,7 +197,7 @@ JOIN (
   SELECT '2024/2' AS des,
          TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.des = s.des;
+) b ON b.des = ;
 
 -- 2025/1 — PRESIDENTE
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
@@ -207,7 +207,7 @@ JOIN (
   SELECT '2025/1' AS des,
          TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
-) b ON b.des = s.des;
+) b ON b.des = ;
 
 -- 2025/1 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
@@ -217,7 +217,7 @@ JOIN (
   SELECT '2025/1' AS des,
          TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
-) b ON b.des = s.des;
+) b ON b.des = ;
 
 -- 2025/2 — PRESIDENTE
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
@@ -227,7 +227,7 @@ JOIN (
   SELECT '2025/2' AS des,
          TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
-) b ON b.des = s.des;
+) b ON b.des = ;
 
 -- 2025/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
@@ -237,7 +237,7 @@ JOIN (
   SELECT '2025/2' AS des,
          TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
-) b ON b.des = s.des;
+) b ON b.des = ;
 
 -- ============================
 -- HORAS (totais por participante x semestre)
