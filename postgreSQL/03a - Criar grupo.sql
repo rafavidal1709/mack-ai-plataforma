@@ -6,22 +6,29 @@ SET search_path TO plataforma;
 CREATE OR REPLACE PROCEDURE criar_grupo(
   IN in_executado_por INT,
   IN in_nome VARCHAR(255),
-  IN in_tipo tipo_grupo,      
-  IN in_descricao TEXT,         
-  IN in_param INT DEFAULT NULL,
-  IN in_param2 TEXT DEFAULT NULL
+  IN in_tipo tipo_grupo DEFAULT NULL,      -- Também tem default NULL porque tem valor DEAFAULT na estrutura do DB
+  IN in_descricao TEXT DEFAULT NULL        -- Também tem default NULL porque tem valor DEAFAULT na estrutura do DB
 )
 LANGUAGE plpgsql
 SET search_path = plataforma
 AS $$
 BEGIN
-  INSERT INTO plataforma.grupo (nome, tipo, descricao)
-  VALUES (
-    in_nome,
-    in_tipo,
-    in_descricao
-  )
-  ON CONFLICT (nome) DO NOTHING;
+  IF in_tipo IS NULL THEN       -- criar a condicional, pois o valor padrão não é NULL na arquitetura da tabela
+    INSERT INTO plataforma.grupo (nome, descricao)
+    VALUES (
+      in_nome,
+      in_descricao
+    )
+    ON CONFLICT (nome) DO NOTHING;
+  ELSE
+    INSERT INTO plataforma.grupo (nome, tipo, descricao)
+    VALUES (
+      in_nome,
+      in_tipo,
+      in_descricao
+    )
+    ON CONFLICT (nome) DO NOTHING;
+  END IF;
 
   INSERT INTO plataforma.log (rotulo, dados)
   VALUES (
