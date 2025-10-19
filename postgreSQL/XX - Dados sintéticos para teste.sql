@@ -55,7 +55,7 @@ CROSS JOIN grupo g;
 --   2025/2 -> 2025-08-01
 -- ============================
 WITH bases AS (
-  SELECT s.id AS semestre_id, ,
+  SELECT s.id AS semestre_id,
          CASE 
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-01 19:00:00-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-01 19:00:00-03'
@@ -83,8 +83,8 @@ CROSS JOIN generate_series(0,1) AS n;
 -- TAREFAS (apenas grupos de trabalho) - 2 por ocorrência
 -- ============================
 WITH bases AS (
-  SELECT s.id AS semestre_id, cricao,
-         CASE cricao
+  SELECT s.id AS semestre_id, descricao,
+         CASE descricao
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-05 09:00:00-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-05 09:00:00-03'
            WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-05 09:00:00-03'
@@ -138,7 +138,7 @@ JOIN participante p ON (p.id % 12) = (e.id % 12);
 INSERT INTO executou (horas, participante, tarefa, valido, confirmado)
 SELECT 1,
        p.id,
-       e.id,
+       t.id,
        TRUE,
        ((p.id + e.id) % 5 = 0)
 FROM tarefa t
@@ -151,8 +151,8 @@ WHERE g.nome LIKE 'Trabalho:%';
 -- COORDENOU (um coordenador por ocorrência, período dentro do semestre)
 -- ============================
 WITH sem_bounds AS (
-  SELECT s.id AS semestre_id, ,
-         CASE cricao
+  SELECT s.id AS semestre_id,
+         CASE descricao
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-01 00:00:00-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-01 00:00:00-03'
            WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-01 00:00:00-03'
@@ -187,7 +187,7 @@ JOIN (
   SELECT '2024/2' AS descricao,
          TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.descricao = ;
+) b ON b.descricao = s.descricao;
 
 -- 2024/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
