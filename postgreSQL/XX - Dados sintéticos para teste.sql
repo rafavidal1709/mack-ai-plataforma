@@ -248,14 +248,3 @@ JOIN (
          TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
 ) b ON b.descricao = s.descricao;
-
--- ============================
--- HORAS (totais por participante x semestre)
--- regra: número sintético 5..24h
--- ============================
-INSERT INTO horas (horas, participante, semestre)
-SELECT ((p.id*3 + s.id) % 20) + 5 AS horas,
-       p.id,
-       s.id
-FROM participante p
-CROSS JOIN semestre s;
