@@ -184,60 +184,60 @@ INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado
 SELECT 8,  1, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
 JOIN (
-  SELECT '2024/2' AS des,
+  SELECT '2024/2' AS descricao,
          TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.des = ;
+) b ON b.descricao = ;
 
 -- 2024/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 6,  2, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
 JOIN (
-  SELECT '2024/2' AS des,
+  SELECT '2024/2' AS descricao,
          TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.des = ;
+) b ON b.descricao = ;
 
 -- 2025/1 — PRESIDENTE
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 8,  3, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
 JOIN (
-  SELECT '2025/1' AS des,
+  SELECT '2025/1' AS descricao,
          TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
-) b ON b.des = ;
+) b ON b.descricao = ;
 
 -- 2025/1 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 6,  4, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
 JOIN (
-  SELECT '2025/1' AS des,
+  SELECT '2025/1' AS descricao,
          TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
-) b ON b.des = ;
+) b ON b.descricao = ;
 
 -- 2025/2 — PRESIDENTE
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 8,  5, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
 JOIN (
-  SELECT '2025/2' AS des,
+  SELECT '2025/2' AS descricao,
          TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
-) b ON b.des = ;
+) b ON b.descricao = ;
 
 -- 2025/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, inicio, fim, ativo, confirmado)
 SELECT 6,  6, s.id, b.ini, b.fim, TRUE, TRUE
 FROM semestre s
 JOIN (
-  SELECT '2025/2' AS des,
+  SELECT '2025/2' AS descricao,
          TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
          TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
-) b ON b.des = ;
+) b ON b.descricao = ;
 
 -- ============================
 -- HORAS (totais por participante x semestre)
