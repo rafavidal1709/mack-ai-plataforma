@@ -61,6 +61,7 @@ CREATE TABLE tarefa(
     replicas      INT NOT NULL DEFAULT 1,
     inicio        TIMESTAMPTZ NOT NULL DEFAULT CURRENT_TIMESTAMP,
     prazo         TIMESTAMPTZ DEFAULT NULL,
+    valido        BOOLEAN NOT NULL DEFAULT FALSE,
     tema          VARCHAR(255) NOT NULL,
     descricao     TEXT DEFAULT NULL,
     video         VARCHAR(255) NULL UNIQUE,
