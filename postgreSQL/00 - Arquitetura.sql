@@ -45,6 +45,7 @@ CREATE TABLE encontro(
     ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
     inicio        TIMESTAMPTZ NOT NULL,
     fim           TIMESTAMPTZ NOT NULL,
+    valido        BOOLEAN NOT NULL DEFAULT TRUE,
     tema          VARCHAR(255) NOT NULL,
     resumo        TEXT DEFAULT NULL,
     video         VARCHAR(255) NULL UNIQUE,
