@@ -133,7 +133,7 @@ CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketin
 
 CREATE TABLE cargo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    horas         INT NOT NULL DEFAULT 1,
+    horas         INT DEFAULT NULL,
     tipo          tipo_cargo NOT NULL,
     participante  INT NOT NULL REFERENCES participante(id),
     semestre      INT NOT NULL REFERENCES semestre(id),
