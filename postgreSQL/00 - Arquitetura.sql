@@ -137,6 +137,7 @@ CREATE TABLE cargo(
     tipo          tipo_cargo NOT NULL,
     participante  INT NOT NULL REFERENCES participante(id),
     semestre      INT NOT NULL REFERENCES semestre(id),
+    ocorrencia    INT DEFAULT NULL REFERENCES ocorreu(id),    -- Usado caso o cargo seja um coordenador de um grupo
     inicio        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     fim           TIMESTAMPTZ DEFAULT NULL,
     ativo         BOOLEAN NOT NULL DEFAULT TRUE,
