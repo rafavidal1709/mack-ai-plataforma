@@ -115,20 +115,6 @@ CREATE TABLE executou(
     CONSTRAINT uq_executou_participante_tarefa UNIQUE (participante, tarefa)
 );
 
-CREATE TABLE coordenou(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    horas         INT NOT NULL DEFAULT 1,
-    participante  INT NOT NULL REFERENCES participante(id),
-    ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
-    inicio        TIMESTAMPTZ NOT NULL,
-    fim           TIMESTAMPTZ NOT NULL,
-    ativo         BOOLEAN NOT NULL DEFAULT TRUE,
-    confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
-    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    CONSTRAINT uq_coordenou_participante_ocorrencia_inicio UNIQUE (participante, ocorrencia, inicio)
-);
-
 CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing', 'coordenador');
 
 CREATE TABLE cargo(
