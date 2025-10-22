@@ -45,8 +45,9 @@ CREATE TABLE encontro(
     ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
     inicio        TIMESTAMPTZ NOT NULL,
     fim           TIMESTAMPTZ NOT NULL,
+    valido        BOOLEAN NOT NULL DEFAULT TRUE,
     tema          VARCHAR(255) NOT NULL,
-    resumo        TEXT NULL,
+    resumo        TEXT DEFAULT NULL,
     video         VARCHAR(255) NULL UNIQUE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
@@ -58,10 +59,12 @@ CREATE TABLE tarefa(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
     horas         INT NOT NULL DEFAULT 1,
-    inicio        TIMESTAMPTZ NOT NULL,
-    prazo         TIMESTAMPTZ NOT NULL,
+    replicas      INT NOT NULL DEFAULT 1,
+    inicio        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    prazo         TIMESTAMPTZ DEFAULT NULL,
+    valido        BOOLEAN NOT NULL DEFAULT TRUE,
     tema          VARCHAR(255) NOT NULL,
-    descricao     TEXT NULL,
+    descricao     TEXT DEFAULT NULL,
     video         VARCHAR(255) NULL UNIQUE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
@@ -126,16 +129,17 @@ CREATE TABLE coordenou(
     CONSTRAINT uq_coordenou_participante_ocorrencia_inicio UNIQUE (participante, ocorrencia, inicio)
 );
 
-CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor');
+CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing');
 
 CREATE TABLE cargo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    horas         INT NOT NULL DEFAULT 1,
+    horas         INT DEFAULT NULL,
     tipo          tipo_cargo NOT NULL,
     participante  INT NOT NULL REFERENCES participante(id),
     semestre      INT NOT NULL REFERENCES semestre(id),
-    inicio        TIMESTAMPTZ NOT NULL,
-    fim           TIMESTAMPTZ NOT NULL,
+    ocorrencia    INT DEFAULT NULL REFERENCES ocorreu(id),    -- Usado caso o cargo seja um coordenador de um grupo
+    inicio        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    fim           TIMESTAMPTZ DEFAULT NULL,
     ativo         BOOLEAN NOT NULL DEFAULT TRUE,
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
