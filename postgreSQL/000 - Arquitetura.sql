@@ -129,7 +129,7 @@ CREATE TABLE coordenou(
     CONSTRAINT uq_coordenou_participante_ocorrencia_inicio UNIQUE (participante, ocorrencia, inicio)
 );
 
-CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing');
+CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing', 'coordenador');
 
 CREATE TABLE cargo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
@@ -144,7 +144,7 @@ CREATE TABLE cargo(
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    CONSTRAINT uq_cargo_participante_semestre_inicio UNIQUE (participante, semestre, inicio)
+    CONSTRAINT uq_cargo_tipo_participante_semestre_ocorrencia_inicio UNIQUE (tipo, participante, semestre, ocorrencia, inicio)
 );
 
 CREATE TABLE horas(
