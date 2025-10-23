@@ -155,37 +155,6 @@ JOIN participante p ON (p.id % 4) = (t.id % 4)
 WHERE g.nome LIKE 'Trabalho:%';
 
 -- ============================
--- COORDENOU (um coordenador por ocorrência, período dentro do semestre)
--- ============================
-WITH sem_bounds AS (
-  SELECT
-    s.id AS semestre_id,
-    s.descricao,
-    CASE s.descricao
-      WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-01 00:00:00-03'
-      WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-01 00:00:00-03'
-      WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-01 00:00:00-03'
-    END AS ini,
-    CASE s.descricao
-      WHEN '2024/2' THEN TIMESTAMPTZ '2024-12-20 23:59:59-03'
-      WHEN '2025/1' THEN TIMESTAMPTZ '2025-07-15 23:59:59-03'
-      WHEN '2025/2' THEN TIMESTAMPTZ '2025-12-20 23:59:59-03'
-    END AS fim
-  FROM semestre s
-)
-INSERT INTO coordenou (horas, participante, ocorrencia, inicio, fim, ativo, confirmado)
-SELECT
-  4,
-  ((o.id - 1) % 24) + 1,
-  o.id,
-  b.ini,
-  b.fim,
-  TRUE,
-  TRUE
-FROM ocorreu o
-JOIN sem_bounds b ON b.semestre_id = o.semestre;
-
--- ============================
 -- CARGOS (por semestre: presidente e marketing)
 -- ============================
 
