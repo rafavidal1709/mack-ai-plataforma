@@ -16,6 +16,7 @@ CREATE OR REPLACE PROCEDURE confirmar_apresentacao(
     IN in_horas NUMERIC DEFAULT NULL
 )
 LANGUAGE plpgsql
+SET search_path = plataforma
 AS $$
 BEGIN
     IF in_horas IS NOT NULL AND in_horas < 0 THEN
@@ -34,4 +35,5 @@ BEGIN
     END IF;
 END;
 $$;
+
 
