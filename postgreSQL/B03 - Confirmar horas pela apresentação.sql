@@ -1,3 +1,5 @@
+SET search_path TO plataforma;
+
 -- =====================================================
 -- B03. Confirmar horas pela apresentação
 -- Procedure: confirmar_apresentacao(executado_por, apresentou_id, horas)
@@ -32,3 +34,4 @@ BEGIN
     END IF;
 END;
 $$;
+
