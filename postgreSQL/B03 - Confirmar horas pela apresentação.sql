@@ -1,11 +1,11 @@
 -- =====================================================
--- B03. Confirmar horas pela apresentaÁ„o
+-- B03. Confirmar horas pela apresenta√ß√£o
 -- Procedure: confirmar_apresentacao(executado_por, apresentou_id, horas)
 -- Por: Vitoria Lima
--- DescriÁ„o:
---   Retorna erro se in_horas for negativo e n„o continua o procedimento.
+-- Descri√ß√£o:
+--   Retorna erro se in_horas for negativo e n√£o continua o procedimento.
 --   Atualiza a tabela apresentou, definindo confirmado como TRUE.
---   Horas È opcional: se n„o for NULL, atualiza; caso contr·rio, mantÈm.
+--   Horas √© opcional: se n√£o for NULL, atualiza; caso contr√°rio, mant√©m.
 -- =====================================================
 
 CREATE OR REPLACE PROCEDURE confirmar_apresentacao(
@@ -17,7 +17,7 @@ LANGUAGE plpgsql
 AS $$
 BEGIN
     IF in_horas IS NOT NULL AND in_horas < 0 THEN
-        RAISE EXCEPTION 'O valor de horas n„o pode ser negativo.';
+        RAISE EXCEPTION 'O valor de horas n√£o pode ser negativo.';
     END IF;
 
     IF in_horas IS NOT NULL THEN
