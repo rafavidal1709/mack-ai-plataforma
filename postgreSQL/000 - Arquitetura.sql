@@ -15,7 +15,12 @@ $$ LANGUAGE plpgsql;
 -- Tabelas
 CREATE TABLE semestre(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    descricao           VARCHAR(255) NOT NULL UNIQUE,
+    descricao     VARCHAR(255) NOT NULL UNIQUE
+                  CHECK (
+                    descricao ~ '^[0-9]{4}/[12]$'
+                    AND split_part(descricao,'/',1)::int > 2015
+                    AND split_part(descricao,'/',1)::int <= (EXTRACT(YEAR FROM CURRENT_DATE))::int + 1
+                  ),
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
