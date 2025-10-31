@@ -39,7 +39,7 @@ BEGIN
   VALUES (in_descricao);
 
   -- Log de auditoria
-  INSERT INTO plataforma.log (rotulo, dados)
+  INSERT INTO log (rotulo, dados)
   VALUES (
     'criar_semestre',
     jsonb_build_object(
