@@ -25,18 +25,18 @@ INSERT INTO grupo (nome, descricao) VALUES
 -- PARTICIPANTES (24)
 -- ============================
 INSERT INTO participante (ra, nome) VALUES
-  ('RA0001','Ana Souza'),      ('RA0002','Bruno Lima'),
-  ('RA0003','Carla Nunes'),    ('RA0004','Diego Martins'),
-  ('RA0005','Eduarda Alves'),  ('RA0006','Felipe Rocha'),
-  ('RA0007','Gabriela Reis'),  ('RA0008','Henrique Silva'),
-  ('RA0009','Isabela Dias'),   ('RA0010','João Pedro'),
-  ('RA0011','Karen Borges'),   ('RA0012','Lucas Ferreira'),
-  ('RA0013','Mariana Pires'),  ('RA0014','Nicolas Teixeira'),
-  ('RA0015','Olivia Castro'),  ('RA0016','Paulo Henrique'),
-  ('RA0017','Queila Monteiro'),('RA0018','Rafael Vidal'),
-  ('RA0019','Sofia Ramos'),    ('RA0020','Tiago Oliveira'),
-  ('RA0021','Ursula Prado'),   ('RA0022','Vitor Santos'),
-  ('RA0023','Wesley Faria'),   ('RA0024','Yasmin Moreira');
+  ('00000001','Ana Souza'),      ('00000002','Bruno Lima'),
+  ('00000003','Carla Nunes'),    ('00000004','Diego Martins'),
+  ('00000005','Eduarda Alves'),  ('00000006','Felipe Rocha'),
+  ('00000007','Gabriela Reis'),  ('00000008','Henrique Silva'),
+  ('00000009','Isabela Dias'),   ('00000010','João Pedro'),
+  ('00000011','Karen Borges'),   ('00000012','Lucas Ferreira'),
+  ('00000013','Mariana Pires'),  ('00000014','Nicolas Teixeira'),
+  ('00000015','Olivia Castro'),  ('00000016','Paulo Henrique'),
+  ('00000017','Queila Monteiro'),('00000018','Rafael Vidal'),
+  ('00000019','Sofia Ramos'),    ('00000020','Tiago Oliveira'),
+  ('00000021','Ursula Prado'),   ('00000022','Vitor Santos'),
+  ('00000023','Wesley Faria'),   ('00000024','Yasmin Moreira');
 
 -- ============================
 -- OCORREU (uma ocorrência por par semestre x grupo)
