@@ -1,0 +1,28 @@
+SET search_path TO plataforma;
+
+-- Cria uma linha na tabela 'grupo', tipo e descrição são opcionais pois tem valor default.
+-- por Kaique Barros
+
+CREATE OR REPLACE PROCEDURE criar_semestre(
+  IN in_executado_por INT DEFAULT NULL,
+  IN in_descricao VARCHAR(255)
+)
+LANGUAGE plpgsql
+SET search_path = plataforma
+AS $$
+BEGIN
+  INSERT INTO semestre (descricao)
+  VALUES (
+    in_descricao
+  );
+  
+  INSERT INTO plataforma.log (rotulo, dados)
+  VALUES (
+    'criar_semestre',
+    jsonb_build_object(
+    'executado_por', in_executado_por,
+    'descricao',     in_descricao
+    )
+  );
+END;
+$$;
