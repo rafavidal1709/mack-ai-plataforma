@@ -1,7 +1,7 @@
 SET search_path TO plataforma;
 
 CREATE OR REPLACE PROCEDURE criar_semestre(
-  IN in_executado_por INT DEFAULT NULL,
+  IN in_executado_por INT,
   IN in_descricao     VARCHAR(255)
 )
 LANGUAGE plpgsql
