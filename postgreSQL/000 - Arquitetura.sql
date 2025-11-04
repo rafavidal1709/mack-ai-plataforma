@@ -123,8 +123,7 @@ CREATE TABLE executou(
     valido        BOOLEAN NOT NULL DEFAULT FALSE,
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    CONSTRAINT uq_executou_participante_tarefa UNIQUE (participante, tarefa)
+    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
 CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing', 'coordenador');
