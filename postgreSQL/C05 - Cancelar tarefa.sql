@@ -1,5 +1,3 @@
-SET search_path TO plataforma;
-
 -- Descrição do procedure
 
 SET search_path TO plataforma;
