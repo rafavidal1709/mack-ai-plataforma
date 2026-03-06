@@ -127,11 +127,22 @@ CREATE TABLE executou(
 );
 
 CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing', 'coordenador');
+CREATE TABLE tipo_cargo(
+    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nome          VARCHAR(255) NOT NULL UNIQUE
+                  CHECK (
+                      length(regexp_replace(nome, '\s+', '', 'g')) > 2
+                  ),
+    descricao     TEXT DEFAULT NULL,
+    horas         INT DEFAULT NULL,
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
 
 CREATE TABLE cargo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT DEFAULT NULL,
-    tipo          tipo_cargo NOT NULL,
+    tipo          INT NOT NULL REFERENCES tipo_cargo(id),
     participante  INT NOT NULL REFERENCES participante(id),
     semestre      INT NOT NULL REFERENCES semestre(id),
     ocorrencia    INT DEFAULT NULL REFERENCES ocorreu(id),    -- Usado caso o cargo seja um coordenador de um grupo
