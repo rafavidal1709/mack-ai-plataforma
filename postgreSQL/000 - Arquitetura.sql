@@ -126,7 +126,6 @@ CREATE TABLE executou(
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
-CREATE TYPE tipo_cargo AS ENUM ('presidente', 'diretor', 'supervisor', 'marketing', 'coordenador');
 CREATE TABLE tipo_cargo(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome          VARCHAR(255) NOT NULL UNIQUE
