@@ -209,6 +209,10 @@ CREATE TRIGGER trg_executou_set_updated_at
 BEFORE UPDATE ON executou
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
+CREATE TRIGGER trg_tipo_cargo_set_updated_at
+BEFORE UPDATE ON tipo_cargo
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
 CREATE TRIGGER trg_cargo_set_updated_at
 BEFORE UPDATE ON cargo
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
