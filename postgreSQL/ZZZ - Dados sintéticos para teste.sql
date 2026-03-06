@@ -158,62 +158,32 @@ WHERE g.nome LIKE 'Trabalho:%';
 -- CARGOS (por semestre: presidente e marketing)
 -- ============================
 
--- 2024/2 — PRESIDENTE
-INSERT INTO cargo (horas, participante, semestre, tipo, inicio, fim, ativo, confirmado)
-SELECT 8,  1, s.id, 'presidente'::plataforma.tipo_cargo, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2024/2' AS descricao,
-         TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.descricao = s.descricao;
+INSERT INTO tipo_cargo (nome, descricao, horas) VALUES
+('presidente',  'Responsável máximo pela organização e representação institucional.', 8),
+('diretor',     'Auxilia na gestão estratégica e organização das atividades.', 6),
+('supervisor',  'Orienta e acompanha o trabalho dos participantes.', 4),
+('marketing',   'Responsável pela comunicação e divulgação das atividades.', 6),
+('coordenador', 'Coordena um grupo ou projeto específico.', 4);
 
--- 2024/2 — MARKETING
 INSERT INTO cargo (horas, participante, semestre, tipo, inicio, fim, ativo, confirmado)
-SELECT 6,  2, s.id, 'marketing'::plataforma.tipo_cargo, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2024/2' AS descricao,
-         TIMESTAMPTZ '2024-08-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2024-12-20 23:59:59-03' AS fim
-) b ON b.descricao = s.descricao;
+SELECT
+    c.horas,
+    c.participante,
+    s.id,
+    tc.id,
+    c.ini,
+    c.fim,
+    TRUE,
+    TRUE
+FROM (
+VALUES
+(8, 1, '2024/2', 'presidente', TIMESTAMPTZ '2024-08-01 00:00:00-03', TIMESTAMPTZ '2024-12-20 23:59:59-03'),
+(6, 2, '2024/2', 'marketing',  TIMESTAMPTZ '2024-08-01 00:00:00-03', TIMESTAMPTZ '2024-12-20 23:59:59-03'),
+(8, 3, '2025/1', 'presidente', TIMESTAMPTZ '2025-03-01 00:00:00-03', TIMESTAMPTZ '2025-07-15 23:59:59-03'),
+(6, 4, '2025/1', 'marketing',  TIMESTAMPTZ '2025-03-01 00:00:00-03', TIMESTAMPTZ '2025-07-15 23:59:59-03'),
+(8, 5, '2025/2', 'presidente', TIMESTAMPTZ '2025-08-01 00:00:00-03', TIMESTAMPTZ '2025-12-20 23:59:59-03'),
+(6, 6, '2025/2', 'marketing',  TIMESTAMPTZ '2025-08-01 00:00:00-03', TIMESTAMPTZ '2025-12-20 23:59:59-03')
+) AS c(horas, participante, semestre_desc, tipo_nome, ini, fim)
 
--- 2025/1 — PRESIDENTE
-INSERT INTO cargo (horas, participante, semestre, tipo, inicio, fim, ativo, confirmado)
-SELECT 8,  3, s.id, 'presidente'::plataforma.tipo_cargo, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2025/1' AS descricao,
-         TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
-) b ON b.descricao = s.descricao;
-
--- 2025/1 — MARKETING
-INSERT INTO cargo (horas, participante, semestre, tipo, inicio, fim, ativo, confirmado)
-SELECT 6,  4, s.id, 'marketing'::plataforma.tipo_cargo, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2025/1' AS descricao,
-         TIMESTAMPTZ '2025-03-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2025-07-15 23:59:59-03' AS fim
-) b ON b.descricao = s.descricao;
-
--- 2025/2 — PRESIDENTE
-INSERT INTO cargo (horas, participante, semestre, tipo, inicio, fim, ativo, confirmado)
-SELECT 8,  5, s.id, 'presidente'::plataforma.tipo_cargo, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2025/2' AS descricao,
-         TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
-) b ON b.descricao = s.descricao;
-
--- 2025/2 — MARKETING
-INSERT INTO cargo (horas, participante, semestre, tipo, inicio, fim, ativo, confirmado)
-SELECT 6,  6, s.id, 'marketing'::plataforma.tipo_cargo, b.ini, b.fim, TRUE, TRUE
-FROM semestre s
-JOIN (
-  SELECT '2025/2' AS descricao,
-         TIMESTAMPTZ '2025-08-01 00:00:00-03' AS ini,
-         TIMESTAMPTZ '2025-12-20 23:59:59-03' AS fim
-) b ON b.descricao = s.descricao;
+JOIN semestre s ON s.descricao = c.semestre_desc
+JOIN tipo_cargo tc ON tc.nome = c.tipo_nome;
