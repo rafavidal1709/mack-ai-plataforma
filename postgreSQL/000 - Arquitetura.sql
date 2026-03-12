@@ -181,6 +181,24 @@ CREATE TABLE tipo_cargo(
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE permissao(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    nome          VARCHAR(255) NOT NULL UNIQUE,
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE TYPE tipo_abrangencia AS ENUM ('ampla', 'restrita');
+
+CREATE TABLE concessao(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    permissao     BIGINT NOT NULL REFERENCES permissao(id),
+    tipo_cargo    BIGINT DEFAULT NULL REFERENCES tipo_cargo(id),
+    abrangencia   tipo_abrangencia NOT NULL DEFAULT 'ampla',
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE cargo(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT DEFAULT NULL,
