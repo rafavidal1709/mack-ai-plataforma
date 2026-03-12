@@ -1,6 +1,6 @@
 -- Reiniciar `schema`
 DROP SCHEMA IF EXISTS plataforma CASCADE;
-CREATE SCHEMA plataforma; 
+CREATE SCHEMA plataforma;
 SET search_path TO plataforma;
 
 -- Função e trigger para atualizar "atualizado" automaticamente
@@ -233,58 +233,23 @@ CREATE TABLE log(
 );
 
 -- Triggers de "updated_at" para cada tabela que tem a coluna "atualizado"
-CREATE TRIGGER trg_semestre_set_updated_at
-BEFORE UPDATE ON semestre
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_grupo_set_updated_at
-BEFORE UPDATE ON grupo
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_ocorreu_set_updated_at
-BEFORE UPDATE ON ocorreu
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_encontro_set_updated_at
-BEFORE UPDATE ON encontro
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_tarefa_set_updated_at
-BEFORE UPDATE ON tarefa
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_participante_set_updated_at
-BEFORE UPDATE ON participante
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_dispositivo_set_updated_at
-BEFORE UPDATE ON dispositivo
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_email_set_updated_at
-BEFORE UPDATE ON email
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_participou_set_updated_at
-BEFORE UPDATE ON participou
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_apresentou_set_updated_at
-BEFORE UPDATE ON apresentou
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_executou_set_updated_at
-BEFORE UPDATE ON executou
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_tipo_cargo_set_updated_at
-BEFORE UPDATE ON tipo_cargo
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_cargo_set_updated_at
-BEFORE UPDATE ON cargo
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
-
-CREATE TRIGGER trg_horas_set_updated_at
-BEFORE UPDATE ON horas
-FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+DO $$
+DECLARE
+    r RECORD;
+BEGIN
+    FOR r IN
+        SELECT table_name
+        FROM information_schema.columns
+        WHERE column_name = 'atualizado'
+          AND table_schema = 'plataforma'
+    LOOP
+        EXECUTE format(
+            'CREATE TRIGGER trg_%I_set_updated_at
+             BEFORE UPDATE ON %I
+             FOR EACH ROW EXECUTE FUNCTION set_updated_at()',
+            r.table_name,
+            r.table_name
+        );
+    END LOOP;
+END;
+$$;
