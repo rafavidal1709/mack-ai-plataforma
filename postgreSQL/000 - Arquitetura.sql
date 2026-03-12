@@ -108,6 +108,14 @@ CREATE TABLE sessao(
     CONSTRAINT uq_sessao_participante_dispositivo UNIQUE (participante, dispositivo)
 );
 
+CREATE TABLE acesso(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    dispositivo   BIGINT NOT NULL REFERENCES dispositivo(id),
+    participante  BIGINT DEFAULT NULL REFERENCES participante(id),
+    url           VARCHAR(1023) NOT NULL,
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE participou(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
