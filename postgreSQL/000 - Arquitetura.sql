@@ -14,7 +14,7 @@ $$ LANGUAGE plpgsql;
 
 -- Tabelas
 CREATE TABLE semestre(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     descricao     VARCHAR(255) NOT NULL UNIQUE
                   CHECK (
                     descricao ~ '^[0-9]{4}/[12]$'
@@ -28,7 +28,7 @@ CREATE TABLE semestre(
 CREATE TYPE tipo_grupo AS ENUM ('estudo', 'trabalho', 'pesquisa');
 
 CREATE TABLE grupo(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome          VARCHAR(255) NOT NULL UNIQUE,
     tipo          tipo_grupo NOT NULL DEFAULT 'estudo',
     descricao     TEXT NULL,
@@ -37,7 +37,7 @@ CREATE TABLE grupo(
 );
 
 CREATE TABLE ocorreu(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     semestre      INT NOT NULL REFERENCES semestre(id),
     grupo         INT NOT NULL REFERENCES grupo(id),
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
@@ -46,7 +46,7 @@ CREATE TABLE ocorreu(
 );
 
 CREATE TABLE encontro(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
     inicio        TIMESTAMPTZ NOT NULL,
     fim           TIMESTAMPTZ NOT NULL,
@@ -61,7 +61,7 @@ CREATE TABLE encontro(
 );
 
 CREATE TABLE tarefa(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
     horas         INT NOT NULL DEFAULT 1,
     replicas      INT NOT NULL DEFAULT 1,
@@ -78,7 +78,7 @@ CREATE TABLE tarefa(
 );
 
 CREATE TABLE participante(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     ra            VARCHAR(255) DEFAULT NULL UNIQUE
                   CHECK (
                     ra ~ '^[0-9]{8}$'           -- exatamente 8 dígitos numéricos
@@ -101,8 +101,11 @@ CREATE TABLE dispositivo(
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE sessao(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+
 CREATE TABLE participou(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
     participante  INT NOT NULL REFERENCES participante(id),
     encontro      INT NOT NULL REFERENCES encontro(id),
@@ -113,7 +116,7 @@ CREATE TABLE participou(
 );
 
 CREATE TABLE apresentou(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
     participante  INT NOT NULL REFERENCES participante(id),
     encontro      INT NOT NULL REFERENCES encontro(id),
@@ -125,7 +128,7 @@ CREATE TABLE apresentou(
 );
 
 CREATE TABLE executou(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
     participante  INT NOT NULL REFERENCES participante(id),
     tarefa        INT NOT NULL REFERENCES tarefa(id),
@@ -136,7 +139,7 @@ CREATE TABLE executou(
 );
 
 CREATE TABLE tipo_cargo(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome          VARCHAR(255) NOT NULL UNIQUE
                   CHECK (
                       length(regexp_replace(nome, '\s+', '', 'g')) > 2
@@ -148,7 +151,7 @@ CREATE TABLE tipo_cargo(
 );
 
 CREATE TABLE cargo(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT DEFAULT NULL,
     tipo          INT NOT NULL REFERENCES tipo_cargo(id),
     participante  INT NOT NULL REFERENCES participante(id),
@@ -164,7 +167,7 @@ CREATE TABLE cargo(
 );
 
 CREATE TABLE horas(
-    id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 0,
     participante  INT NOT NULL REFERENCES participante(id),
     semestre      INT NOT NULL REFERENCES semestre(id),
