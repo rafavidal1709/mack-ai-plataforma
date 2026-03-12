@@ -79,7 +79,7 @@ CREATE TABLE tarefa(
 
 CREATE TABLE participante(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    ra            VARCHAR(255) NOT NULL UNIQUE
+    ra            VARCHAR(255) DEFAULT NULL UNIQUE
                   CHECK (
                     ra ~ '^[0-9]{8}$'           -- exatamente 8 dígitos numéricos
                   ),
@@ -88,6 +88,7 @@ CREATE TABLE participante(
                     length(btrim(nome)) > 5      -- mais de 5 caracteres após trim
                     AND position(' ' in btrim(nome)) > 0  -- pelo menos um espaço interno
                   ),
+    senha         VARCHAR(255) DEFAULT NULL,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
