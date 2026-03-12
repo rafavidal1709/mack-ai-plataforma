@@ -205,6 +205,10 @@ CREATE TRIGGER trg_participante_set_updated_at
 BEFORE UPDATE ON participante
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
+CREATE TRIGGER trg_dispositivo_set_updated_at
+BEFORE UPDATE ON dispositivo
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
 CREATE TRIGGER trg_participou_set_updated_at
 BEFORE UPDATE ON participou
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
