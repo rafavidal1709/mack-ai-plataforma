@@ -38,8 +38,8 @@ CREATE TABLE grupo(
 
 CREATE TABLE ocorreu(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    semestre      INT NOT NULL REFERENCES semestre(id),
-    grupo         INT NOT NULL REFERENCES grupo(id),
+    semestre      BIGINT NOT NULL REFERENCES semestre(id),
+    grupo         BIGINT NOT NULL REFERENCES grupo(id),
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     CONSTRAINT uq_ocorreu_semestre_grupo UNIQUE (semestre, grupo)
@@ -47,7 +47,7 @@ CREATE TABLE ocorreu(
 
 CREATE TABLE encontro(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
+    ocorrencia    BIGINT NOT NULL REFERENCES ocorreu(id),
     inicio        TIMESTAMPTZ NOT NULL,
     fim           TIMESTAMPTZ NOT NULL,
     valido        BOOLEAN NOT NULL DEFAULT TRUE,
@@ -62,7 +62,7 @@ CREATE TABLE encontro(
 
 CREATE TABLE tarefa(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    ocorrencia    INT NOT NULL REFERENCES ocorreu(id),
+    ocorrencia    BIGINT NOT NULL REFERENCES ocorreu(id),
     horas         INT NOT NULL DEFAULT 1,
     replicas      INT NOT NULL DEFAULT 1,
     inicio        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -103,12 +103,16 @@ CREATE TABLE dispositivo(
 
 CREATE TABLE sessao(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    participante  BIGINT NOT NULL REFERENCES participante(id),
+    dispositivo   BIGINT NOT NULL REFERENCES dispositivo(id),
+    CONSTRAINT uq_sessao_participante_dispositivo UNIQUE (participante, dispositivo)
+);
 
 CREATE TABLE participou(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
-    participante  INT NOT NULL REFERENCES participante(id),
-    encontro      INT NOT NULL REFERENCES encontro(id),
+    participante  BIGINT NOT NULL REFERENCES participante(id),
+    encontro      BIGINT NOT NULL REFERENCES encontro(id),
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
@@ -118,8 +122,8 @@ CREATE TABLE participou(
 CREATE TABLE apresentou(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
-    participante  INT NOT NULL REFERENCES participante(id),
-    encontro      INT NOT NULL REFERENCES encontro(id),
+    participante  BIGINT NOT NULL REFERENCES participante(id),
+    encontro      BIGINT NOT NULL REFERENCES encontro(id),
     valido        BOOLEAN NOT NULL DEFAULT TRUE,
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
@@ -130,8 +134,8 @@ CREATE TABLE apresentou(
 CREATE TABLE executou(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
-    participante  INT NOT NULL REFERENCES participante(id),
-    tarefa        INT NOT NULL REFERENCES tarefa(id),
+    participante  BIGINT NOT NULL REFERENCES participante(id),
+    tarefa        BIGINT NOT NULL REFERENCES tarefa(id),
     valido        BOOLEAN NOT NULL DEFAULT FALSE,
     confirmado    BOOLEAN NOT NULL DEFAULT FALSE,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
@@ -153,10 +157,10 @@ CREATE TABLE tipo_cargo(
 CREATE TABLE cargo(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT DEFAULT NULL,
-    tipo          INT NOT NULL REFERENCES tipo_cargo(id),
-    participante  INT NOT NULL REFERENCES participante(id),
-    semestre      INT NOT NULL REFERENCES semestre(id),
-    ocorrencia    INT DEFAULT NULL REFERENCES ocorreu(id),    -- Usado caso o cargo seja um coordenador de um grupo
+    tipo          BIGINT NOT NULL REFERENCES tipo_cargo(id),
+    participante  BIGINT NOT NULL REFERENCES participante(id),
+    semestre      BIGINT NOT NULL REFERENCES semestre(id),
+    ocorrencia    BIGINT DEFAULT NULL REFERENCES ocorreu(id),    -- Usado caso o cargo seja um coordenador de um grupo
     inicio        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     fim           TIMESTAMPTZ DEFAULT NULL,
     ativo         BOOLEAN NOT NULL DEFAULT TRUE,
@@ -169,8 +173,8 @@ CREATE TABLE cargo(
 CREATE TABLE horas(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 0,
-    participante  INT NOT NULL REFERENCES participante(id),
-    semestre      INT NOT NULL REFERENCES semestre(id),
+    participante  BIGINT NOT NULL REFERENCES participante(id),
+    semestre      BIGINT NOT NULL REFERENCES semestre(id),
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     CONSTRAINT uq_horas_participante_semestre UNIQUE (participante, semestre)
