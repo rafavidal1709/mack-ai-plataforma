@@ -1,6 +1,6 @@
 -- Reiniciar `schema`
 DROP SCHEMA IF EXISTS plataforma CASCADE;
-CREATE SCHEMA plataforma;
+CREATE SCHEMA plataforma; 
 SET search_path TO plataforma;
 
 -- Função e trigger para atualizar "atualizado" automaticamente
