@@ -169,12 +169,15 @@ CREATE TABLE executou(
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
+CREATE TYPE tipo_abrangencia AS ENUM ('ampla', 'restrita');
+
 CREATE TABLE tipo_cargo(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     nome          VARCHAR(255) NOT NULL UNIQUE
                   CHECK (
                       length(regexp_replace(nome, '\s+', '', 'g')) > 2
                   ),
+    abrangencia   tipo_abrangencia NOT NULL DEFAULT 'ampla',
     descricao     TEXT DEFAULT NULL,
     horas         INT DEFAULT NULL,
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
@@ -187,8 +190,6 @@ CREATE TABLE permissao(
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
-
-CREATE TYPE tipo_abrangencia AS ENUM ('ampla', 'restrita');
 
 CREATE TABLE concessao(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
