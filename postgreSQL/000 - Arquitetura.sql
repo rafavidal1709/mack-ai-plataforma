@@ -116,6 +116,25 @@ CREATE TABLE acesso(
     criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE email(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    email         VARCHAR(255) NOT NULL UNIQUE
+                  CHECK (
+                      email ~ '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$'
+                  ),
+    participante  BIGINT DEFAULT NULL REFERENCES participante(id),
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
+CREATE TABLE codigo_email(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    email         BIGINT NOT NULL REFERENCES email(id),
+    dispositivo   BIGINT NOT NULL REFERENCES dispositivo(id),
+    codigo        VARCHAR(255) NOT NULL,
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE participou(
     id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
@@ -222,6 +241,10 @@ FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 CREATE TRIGGER trg_dispositivo_set_updated_at
 BEFORE UPDATE ON dispositivo
+FOR EACH ROW EXECUTE FUNCTION set_updated_at();
+
+CREATE TRIGGER trg_email_set_updated_at
+BEFORE UPDATE ON email
 FOR EACH ROW EXECUTE FUNCTION set_updated_at();
 
 CREATE TRIGGER trg_participou_set_updated_at
