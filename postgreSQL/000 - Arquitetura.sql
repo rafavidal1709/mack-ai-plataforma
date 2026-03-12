@@ -205,7 +205,7 @@ CREATE TABLE cargo(
     tipo          BIGINT NOT NULL REFERENCES tipo_cargo(id),
     participante  BIGINT NOT NULL REFERENCES participante(id),
     semestre      BIGINT NOT NULL REFERENCES semestre(id),
-    ocorrencia    BIGINT DEFAULT NULL REFERENCES ocorreu(id),    -- Usado caso o cargo seja um coordenador de um grupo
+    grupo         BIGINT DEFAULT NULL REFERENCES grupo(id),    -- Usado caso o cargo seja um coordenador de um grupo
     inicio        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     fim           TIMESTAMPTZ DEFAULT NULL,
     ativo         BOOLEAN NOT NULL DEFAULT TRUE,
