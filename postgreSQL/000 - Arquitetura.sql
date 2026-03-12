@@ -93,6 +93,14 @@ CREATE TABLE participante(
     atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE dispositivo(
+    id            BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    dados         JSONB DEFAULT NULL,
+    codigo        VARCHAR(255) NOT NULL,
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    atualizado    TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+);
+
 CREATE TABLE participou(
     id            INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     horas         INT NOT NULL DEFAULT 1,
