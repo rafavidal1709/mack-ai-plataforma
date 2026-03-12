@@ -206,7 +206,7 @@ CREATE TABLE cargo(
     tipo          BIGINT NOT NULL REFERENCES tipo_cargo(id),
     participante  BIGINT NOT NULL REFERENCES participante(id),
     semestre      BIGINT NOT NULL REFERENCES semestre(id),
-    grupo         BIGINT DEFAULT NULL REFERENCES grupo(id),    -- Usado caso o cargo seja um coordenador de um grupo
+    ocorrencia    INT DEFAULT NULL REFERENCES ocorreu(id),    -- Usado caso o cargo seja um coordenador de um grupo
     inicio        TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     fim           TIMESTAMPTZ DEFAULT NULL,
     ativo         BOOLEAN NOT NULL DEFAULT TRUE,
@@ -271,25 +271,24 @@ DECLARE
 BEGIN
 
     -- ler modo do ambiente
-    BEGIN
-        v_mode := current_setting('plataforma.environment_mode');
-    EXCEPTION
-        WHEN others THEN
-            v_mode := 'production';
-    END;
+    v_mode := current_setting('plataforma.environment_mode', true);
+
+    IF v_mode IS NULL THEN
+        v_mode := 'production';
+    END IF;
 
     -- ambiente de desenvolvimento libera tudo
     IF v_mode = 'development' THEN
         RETURN;
     END IF;
 
-    ----------------------------------------------------------------
-    -- regra 1: permissao global (tipo_cargo NULL)
-    ----------------------------------------------------------------
+    ---------------------------------------------------------------
+    -- regra 1: permissão global
+    ---------------------------------------------------------------
 
     IF EXISTS (
         SELECT 1
-        FROM concessao c
+        FROM plataforma.concessao c
         WHERE c.permissao = p_permissao
         AND c.tipo_cargo IS NULL
         AND c.abrangencia = 'ampla'
@@ -297,15 +296,17 @@ BEGIN
         RETURN;
     END IF;
 
-    ----------------------------------------------------------------
+    ---------------------------------------------------------------
     -- regra 2: verificar cargos ativos
-    ----------------------------------------------------------------
+    ---------------------------------------------------------------
 
     SELECT TRUE
     INTO v_ok
-    FROM cargo cg
-    JOIN concessao cs
+    FROM plataforma.cargo cg
+    JOIN plataforma.concessao cs
         ON cs.tipo_cargo = cg.tipo
+    LEFT JOIN plataforma.ocorreu oc
+        ON oc.id = cg.ocorrencia
     WHERE
         cg.participante = p_participante
         AND cg.ativo = TRUE
@@ -314,6 +315,7 @@ BEGIN
         AND cg.inicio <= NOW()
         AND cs.permissao = p_permissao
         AND (
+
             -- abrangência ampla
             cs.abrangencia = 'ampla'
 
@@ -322,9 +324,10 @@ BEGIN
             -- abrangência restrita
             (
                 cs.abrangencia = 'restrita'
-                AND cg.grupo IS NOT NULL
-                AND cg.grupo = p_grupo
+                AND cg.ocorrencia IS NOT NULL
+                AND oc.grupo = p_grupo
             )
+
         )
     LIMIT 1;
 
@@ -332,9 +335,9 @@ BEGIN
         RETURN;
     END IF;
 
-    ----------------------------------------------------------------
+    ---------------------------------------------------------------
     -- acesso negado
-    ----------------------------------------------------------------
+    ---------------------------------------------------------------
 
     RAISE EXCEPTION 'Acesso negado'
     USING ERRCODE = '42501';
