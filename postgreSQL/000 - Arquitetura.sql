@@ -254,3 +254,90 @@ BEGIN
     END LOOP;
 END;
 $$;
+
+SET plataforma.environment_mode = 'development';
+
+CREATE OR REPLACE FUNCTION verificar_permissao(
+    p_participante BIGINT,
+    p_permissao BIGINT,
+    p_grupo BIGINT DEFAULT NULL
+)
+RETURNS void
+LANGUAGE plpgsql
+AS $$
+DECLARE
+    v_mode TEXT;
+    v_ok BOOLEAN;
+BEGIN
+
+    -- ler modo do ambiente
+    BEGIN
+        v_mode := current_setting('plataforma.environment_mode');
+    EXCEPTION
+        WHEN others THEN
+            v_mode := 'production';
+    END;
+
+    -- ambiente de desenvolvimento libera tudo
+    IF v_mode = 'development' THEN
+        RETURN;
+    END IF;
+
+    ----------------------------------------------------------------
+    -- regra 1: permissao global (tipo_cargo NULL)
+    ----------------------------------------------------------------
+
+    IF EXISTS (
+        SELECT 1
+        FROM concessao c
+        WHERE c.permissao = p_permissao
+        AND c.tipo_cargo IS NULL
+        AND c.abrangencia = 'ampla'
+    ) THEN
+        RETURN;
+    END IF;
+
+    ----------------------------------------------------------------
+    -- regra 2: verificar cargos ativos
+    ----------------------------------------------------------------
+
+    SELECT TRUE
+    INTO v_ok
+    FROM cargo cg
+    JOIN concessao cs
+        ON cs.tipo_cargo = cg.tipo
+    WHERE
+        cg.participante = p_participante
+        AND cg.ativo = TRUE
+        AND cg.confirmado = TRUE
+        AND (cg.fim IS NULL OR cg.fim > NOW())
+        AND cg.inicio <= NOW()
+        AND cs.permissao = p_permissao
+        AND (
+            -- abrangência ampla
+            cs.abrangencia = 'ampla'
+
+            OR
+
+            -- abrangência restrita
+            (
+                cs.abrangencia = 'restrita'
+                AND cg.grupo IS NOT NULL
+                AND cg.grupo = p_grupo
+            )
+        )
+    LIMIT 1;
+
+    IF v_ok THEN
+        RETURN;
+    END IF;
+
+    ----------------------------------------------------------------
+    -- acesso negado
+    ----------------------------------------------------------------
+
+    RAISE EXCEPTION 'Acesso negado'
+    USING ERRCODE = '42501';
+
+END;
+$$;
