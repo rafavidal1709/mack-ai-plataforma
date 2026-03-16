@@ -6,7 +6,8 @@ SET search_path TO plataforma;
 INSERT INTO semestre (descricao) VALUES
   ('2024/2'),
   ('2025/1'),
-  ('2025/2');
+  ('2025/2'),
+  ('2026/1');
 
 -- ============================
 -- GRUPOS (4 de estudo, 4 de trabalho)
@@ -53,6 +54,7 @@ CROSS JOIN grupo g;
 --   2024/2 -> 2024-08-01
 --   2025/1 -> 2025-03-01
 --   2025/2 -> 2025-08-01
+--   2026/1 -> 2026-03-01
 -- ============================
 WITH bases AS (
   SELECT
@@ -62,6 +64,7 @@ WITH bases AS (
       WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-01 19:00:00-03'
       WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-01 19:00:00-03'
       WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-01 19:00:00-03'
+      WHEN '2026/1' THEN TIMESTAMPTZ '2026-03-01 19:00:00-03'
     END AS base_dt
   FROM semestre s
 ),
@@ -94,6 +97,7 @@ WITH bases AS (
            WHEN '2024/2' THEN TIMESTAMPTZ '2024-08-05 09:00:00-03'
            WHEN '2025/1' THEN TIMESTAMPTZ '2025-03-05 09:00:00-03'
            WHEN '2025/2' THEN TIMESTAMPTZ '2025-08-05 09:00:00-03'
+           WHEN '2026/1' THEN TIMESTAMPTZ '2026-03-05 09:00:00-03'
          END AS base_dt
   FROM semestre s
 ),
@@ -182,7 +186,9 @@ VALUES
 (8, 3, '2025/1', 'presidente', TIMESTAMPTZ '2025-03-01 00:00:00-03', TIMESTAMPTZ '2025-07-15 23:59:59-03'),
 (6, 4, '2025/1', 'marketing',  TIMESTAMPTZ '2025-03-01 00:00:00-03', TIMESTAMPTZ '2025-07-15 23:59:59-03'),
 (8, 5, '2025/2', 'presidente', TIMESTAMPTZ '2025-08-01 00:00:00-03', TIMESTAMPTZ '2025-12-20 23:59:59-03'),
-(6, 6, '2025/2', 'marketing',  TIMESTAMPTZ '2025-08-01 00:00:00-03', TIMESTAMPTZ '2025-12-20 23:59:59-03')
+(6, 6, '2025/2', 'marketing',  TIMESTAMPTZ '2025-08-01 00:00:00-03', TIMESTAMPTZ '2025-12-20 23:59:59-03'),
+(8, 7, '2026/1', 'presidente', TIMESTAMPTZ '2025-08-01 00:00:00-03', TIMESTAMPTZ '2025-12-20 23:59:59-03'),
+(6, 8, '2026/1', 'marketing',  TIMESTAMPTZ '2025-08-01 00:00:00-03', TIMESTAMPTZ '2025-12-20 23:59:59-03')
 ) AS c(horas, participante, semestre_desc, tipo_nome, ini, fim)
 
 JOIN semestre s ON s.descricao = c.semestre_desc
