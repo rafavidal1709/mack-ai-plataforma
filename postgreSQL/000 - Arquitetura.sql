@@ -132,7 +132,8 @@ CREATE TABLE codigo_email(
     email         BIGINT NOT NULL REFERENCES email(id),
     dispositivo   BIGINT NOT NULL REFERENCES dispositivo(id),
     codigo        VARCHAR(255) NOT NULL,
-    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW()
+    criado        TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
+    validado      TIMESTAMPTZ  DEFAULT NULL
 );
 
 CREATE TABLE participou(
